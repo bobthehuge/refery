@@ -36,8 +36,8 @@ def pretty_diff(actual: str, expected: str) -> str:
     expected_lines = expected.replace('\n', '↵\n').splitlines()
 
     diff_lines = unified_diff(
-        expected_lines,
         actual_lines,
+        expected_lines,
         fromfile='got',
         tofile='expected',
         lineterm='',
@@ -69,7 +69,7 @@ def pretty_assert(name: str, actual: T, expected: T,
     :return: The value of the compare function applied to actual and expected
     """
 
-    msg = compare(actual, expected)
+    msg = compare(actual=actual, expected=expected)
     if msg is None:
         return True
 
