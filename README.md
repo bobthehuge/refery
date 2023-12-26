@@ -43,9 +43,9 @@ Each test suite is a YAML mapping which accepts the following fields:
 |------------|---------------------------------------------------------------------------------------------|:--------:|
 | `name`     | Name of the test suite.                                                                     |    ❌     |
 | `tests`    | YAML sequence containing the test cases.                                                    |    ✅     |
-| `setup`    | Command to execute before each test case.                                                   |    ✅     |  
-| `teardown` | Command to execute after each test case.                                                    |    ✅     |  
-| `fatal`    | Indicates if a failure in a test case means an abortion of the runner. Defaults to `false`. |    ✅     |  
+| `setup`    | Command to execute before each test case.                                                   |    ✅     |
+| `teardown` | Command to execute after each test case.                                                    |    ✅     |
+| `fatal`    | Indicates if a failure in a test case means an abortion of the runner. Defaults to `false`. |    ✅     |
 
 ### Test cases
 
@@ -63,7 +63,7 @@ Each test case is a YAML mapping accepting the following fields:
 | `exit_code`                 | Expected exit code.                                                                                                                                                                                                                                                                                                              |    ✅     |
 | `skipped`                   | Boolean indicating whether the test case shall be ignored.                                                                                                                                                                                                                                                                       |    ✅     |
 | `timeout`                   | Timeout in seconds, after which the test case is stopped marked as failed.                                                                                                                                                                                                                                                       |    ✅     |
-| `stdout_mode`/`stderr_mode` | The testing mode of the two output streams. <br/>Can be of two kinds:<ul><li>`strict`: The actual value shall be the same as the expected value.</li><li>`exists`: If the expected value is not empty, the actual value shall not be empty and reciprocally.</li></ul> Both `stdout_mode` and `stderr_mode` default to `strict`. |    ✅     |
+| `stdout_mode`/`stderr_mode` | The testing mode of the two output streams. <br/>Can be of three kinds:<ul><li>`strict`: The actual value shall be the same as the expected value.</li><li>`exists`: If the expected value is not empty, the actual value shall not be empty and reciprocally.</li><li>`match`: uses re.fullmatch to find expected value inside of actual.</li></ul> Both `stdout_mode` and `stderr_mode` default to `strict`. |    ✅     |
 
 If the `ref` is specified, it is used to test the standard output, standard
 error and exit code. If any of these fields is specified, they take precedence
@@ -113,6 +113,12 @@ testsuites:
         args:
           - --bye
           - John Doe
+      - name: testecho
+        stdout_mode: match
+        stdout: "(.*)foo(.*)"
+        args:
+          - foo
+          - bar
 ```
 
 This defines two test suites, the first containing two test cases and the second
