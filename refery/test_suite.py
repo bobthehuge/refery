@@ -1,6 +1,7 @@
 import argparse
 import enum
 import pathlib
+import re
 import subprocess
 import sys
 import time
@@ -33,8 +34,9 @@ class OutputMode(Enum):
                   nothing was expected.
     """
 
-    STRICT = ("strict",)
-    EXISTS = ("exists",)
+    STRICT = 'strict',
+    EXISTS = 'exists',
+    MATCH = 'match',
 
     def compare_outputs(self, expected: str, actual: str) -> Optional[str]:
         """
@@ -53,6 +55,10 @@ class OutputMode(Enum):
                 if expected != "" and actual == ""
                 else None
             )
+
+        if self.value[0] == 'match':
+            return None if re.fullmatch(expected, actual)!=None else \
+        pretty_diff(actual, expected)
 
         return None if expected == actual else pretty_diff(actual, expected)
 
